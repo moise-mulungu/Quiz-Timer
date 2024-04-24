@@ -58,7 +58,7 @@ npm run build
 yarn build
 ```
 
-[live demo]()
+[live demo](https://quiz-timer-git-main-moisemulungus-projects.vercel.app/)
 
 ## Author
 
