@@ -75,31 +75,7 @@ export default function QuestionBox({ handleExitGame, quizData }) {
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded shadow-md flex flex-col w-full max-w-[100vh] max-h-[80vh] overflow-auto">
             <>
-              <div className="flex justify-between items-center">
-                <div className="text-xl font-bold text-blue-600">{question}</div>
-                <div
-                  className={`
-                    text-lg font-bold text-center whitespace-nowrap
-                    px-2 py-1 
-                    rounded 
-                    w-62 
-                    ${
-                      timer > 10 ? 'text-green-500' : timer > 5 ? 'text-orange-500' : 'text-red-500'
-                    }
-                  `}
-                >
-                  {timer === defaultSecondsToAnswerQuestion ? null : (
-                    <span>
-                      {' '}
-                      Time remaining:{' '}
-                      <span className="font-mono inline-block w-6 text-right">
-                        {String(timer).padStart(2, ' ')}
-                      </span>{' '}
-                      seconds
-                    </span>
-                  )}
-                </div>
-              </div>
+              <div className="text-xl font-bold text-blue-600">{question}</div>
               <hr className="my-4" />
 
               <div className="text-base mb-4">
@@ -148,6 +124,32 @@ export default function QuestionBox({ handleExitGame, quizData }) {
                   )
                 })}
               </div>
+
+              <div className="flex justify-between items-center">
+                <div
+                  className={`
+                    text-lg font-bold text-center whitespace-nowrap
+                    px-2 py-1 
+                    rounded 
+                    w-62 
+                    ${
+                      timer > 10 ? 'text-green-500' : timer > 5 ? 'text-orange-500' : 'text-red-500'
+                    }
+                  `}
+                >
+                  {timer === defaultSecondsToAnswerQuestion ? null : (
+                    <span>
+                      {' '}
+                      Time remaining:{' '}
+                      <span className="font-mono inline-block w-6 text-right">
+                        {String(timer).padStart(2, ' ')}
+                      </span>{' '}
+                      seconds
+                    </span>
+                  )}
+                </div>
+              </div>
+
               <div className="flex justify-between">
                 <div>
                   {currentQuestionIndex > 0 ? (
