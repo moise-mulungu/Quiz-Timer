@@ -1,37 +1,89 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+![](https://img.shields.io/badge/Microverse-blueviolet)
+
+# Quiz-Timer
+
+> The ultimate quiz app with a twist! Built with Next.js (React.js) and styled with Tailwind CSS, it's as sleek as it is intuitive. Race against the clock to answer questions in your chosen category and test your knowledge.
+
+## Built With
+
+- Next.js
+- Axios
+- VSCode
 
 ## Getting Started
 
-First, run the development server:
+> This application utilizes numerous URL fetch endpoints, some of which are local while others are external. Among these external sources is the Quiz API (https://quizapi.io/), which provides a vast array of question-and-answer quizzes.
+
+To get a local copy up and running follow these simple example steps.
+
+## Prerequisites
+
+- Node.js installed on your local machine
+- NPM or Yarn to manage the packages
+
+## Setup
+
+Clone the repository to your local machine:
+
+```bash
+git clone https://github.com/moise-mulungu/Quiz-Timer
+```
+
+## Install
+
+Navigate to the project directory and install the dependencies:
+
+```bash
+cd quiz-timer
+npm install
+# or
+yarn install
+```
+
+## Usage
 
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Deployment
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+To build the application for production, use the following command:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```bash
+npm run build
+# or
+yarn build
+```
 
-## Learn More
+[live demo]()
 
-To learn more about Next.js, take a look at the following resources:
+## Author
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+👤 **Moise Mulungu**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- GitHub: [@moise-mulungu](https://github.com/moise-mulungu)
+- Twitter: [@moise_mulungu](https://twitter.com/moise_mulungu)
+- LinkedIn: [Moïse (Musa) Mulungu](https://www.linkedin.com/in/moisemulungu/)
 
-## Deploy on Vercel
+## 🤝 Contributing
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Contributions, issues, and feature requests are welcome!
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-# Quiz-Timer
+Feel free to check the [issues page](https://github.com/moise-mulungu/Quiz-Timer/issues).
+
+## Show your support
+
+Give a ⭐️ if you like this project!
+
+## Acknowledgments
+
+- Hat tip to anyone whose code was used
+- Inspiration
+- etc
+
+## 📝 License
+
+This project is [MIT](./MIT.md) licensed.
