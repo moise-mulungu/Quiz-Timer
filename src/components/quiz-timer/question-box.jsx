@@ -1,40 +1,36 @@
 import { useState, useEffect } from 'react'
-
+import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import QuizScore from './quiz-score'
+
 const defaultSecondsToAnswerQuestion = 15
 
 export default function QuestionBox({ handleExitGame, quizData }) {
   const [selectedAnswer, setSelectedAnswer] = useState(null)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
-  const [timer, setTimer] = useState(defaultSecondsToAnswerQuestion)
   const [showCorrectAnswer, setShowCorrectAnswer] = useState(false)
   const [score, setScore] = useState(0)
   const [showScorePopup, setShowScorePopup] = useState(false)
+  const [timerKey, setTimerKey] = useState(0)
+  const [explanation, setExplanation] = useState(null)
 
   useEffect(() => {
-    setTimer(defaultSecondsToAnswerQuestion)
+    setTimerKey((prevKey) => prevKey + 1) // Reset key to restart CountdownCircleTimer
   }, [currentQuestionIndex])
 
-  useEffect(() => {
-    const countdown = setInterval(() => {
-      setTimer((prevTimer) => {
-        if (prevTimer <= 1 || selectedAnswer) {
-          clearInterval(countdown)
-          setShowCorrectAnswer(true)
-          return defaultSecondsToAnswerQuestion // Reset timer
-        } else {
-          return prevTimer - 1
-        }
-      })
-    }, 1000)
-
-    return () => clearInterval(countdown)
-  }, [currentQuestionIndex, selectedAnswer])
-
   const handleAnswerSelection = (event) => {
-    setSelectedAnswer(event.target.value)
-    if (event.target.value === correctAnswer) {
+    const selectedAnswer = event.target.value
+    setSelectedAnswer(selectedAnswer)
+
+    if (selectedAnswer === correctAnswer) {
       setScore(score + 1)
+    } else {
+      // Retrieve explanation for the current question
+      const currentQuestion = quizData[currentQuestionIndex]
+      const { explanation } = currentQuestion
+
+      // Display the explanation
+      setShowCorrectAnswer(true)
+      setExplanation(explanation) // Add state for explanation
     }
   }
 
@@ -42,8 +38,7 @@ export default function QuestionBox({ handleExitGame, quizData }) {
     const hasMoreQuestions = currentQuestionIndex < quizData.length - 1
 
     if (hasMoreQuestions) {
-      const nextQuestionIndex = currentQuestionIndex + 1
-      setCurrentQuestionIndex(nextQuestionIndex)
+      setCurrentQuestionIndex((prevIndex) => prevIndex + 1)
       setSelectedAnswer(null)
       setShowCorrectAnswer(false)
     } else {
@@ -53,8 +48,9 @@ export default function QuestionBox({ handleExitGame, quizData }) {
 
   const handleGotoPreviousQuestion = () => {
     if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(currentQuestionIndex - 1)
+      setCurrentQuestionIndex((prevIndex) => prevIndex - 1)
       setSelectedAnswer(null)
+      setShowCorrectAnswer(false)
     }
   }
 
@@ -64,7 +60,7 @@ export default function QuestionBox({ handleExitGame, quizData }) {
     setShowCorrectAnswer(false)
     setScore(0)
     setShowScorePopup(false)
-    setTimer(defaultSecondsToAnswerQuestion)
+    setTimerKey((prevKey) => prevKey + 1) // Reset key to restart CountdownCircleTimer
   }
 
   const { question, correctAnswer, answerChoices } = quizData[currentQuestionIndex]
@@ -75,7 +71,73 @@ export default function QuestionBox({ handleExitGame, quizData }) {
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded shadow-md flex flex-col w-full max-w-[100vh] max-h-[80vh] overflow-auto">
             <>
-              <div className="text-xl font-bold text-blue-600">{question}</div>
+              {/* Add progress bar here */}
+              <div className="relative h-2 mb-4">
+                <div
+                  className="absolute left-0 top-0 h-2 bg-green-500"
+                  style={{ width: `${(currentQuestionIndex / quizData.length) * 100}%` }}
+                />
+              </div>
+              <div className="flex justify-between items-center mb-4">
+                <div className="text-xl font-bold text-blue-600">{question}</div>
+                <div className="text-lg font-bold text-center whitespace-nowrap px-2 py-1 rounded w-62">
+                  <CountdownCircleTimer
+                    key={timerKey} // Key to force reset the timer
+                    isPlaying={!selectedAnswer && !showCorrectAnswer}
+                    duration={defaultSecondsToAnswerQuestion}
+                    colors={[
+                      [
+                        ({ remainingTime }) =>
+                          remainingTime > 10
+                            ? '#004777'
+                            : remainingTime > 5
+                            ? '#F7B801'
+                            : '#A30000',
+                        0.33,
+                      ],
+                      [
+                        ({ remainingTime }) =>
+                          remainingTime > 10
+                            ? '#004777'
+                            : remainingTime > 5
+                            ? '#F7B801'
+                            : '#A30000',
+                        0.33,
+                      ],
+                      [
+                        ({ remainingTime }) =>
+                          remainingTime > 10
+                            ? '#004777'
+                            : remainingTime > 5
+                            ? '#F7B801'
+                            : '#A30000',
+                        0.33,
+                      ],
+                    ]}
+                    onComplete={() => {
+                      setShowCorrectAnswer(true)
+                      return [true, 0]
+                    }}
+                    size={40} // Reduce the size of the timer
+                    strokeWidth={6} // Adjust the thickness of the timer circle
+                    className="mt-4" // Add margin-top
+                  >
+                    {({ remainingTime }) => (
+                      <div
+                        className={`${
+                          remainingTime > 10
+                            ? 'text-green-500'
+                            : remainingTime > 5
+                            ? 'text-orange-500'
+                            : 'text-red-500'
+                        }`}
+                      >
+                        {remainingTime}
+                      </div>
+                    )}
+                  </CountdownCircleTimer>
+                </div>
+              </div>
               <hr className="my-4" />
 
               <div className="text-base mb-4">
@@ -105,49 +167,9 @@ export default function QuestionBox({ handleExitGame, quizData }) {
                       <label htmlFor={answerChoice} className="ml-2">
                         {answerChoice}
                       </label>
-                      {showCorrectAnswer && isCorrect ? (
-                        <svg
-                          className="h-6 w-6 text-green-500 ml-2"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
-                      ) : null}
                     </div>
                   )
                 })}
-              </div>
-
-              <div className="flex justify-between items-center">
-                <div
-                  className={`
-                    text-lg font-bold text-center whitespace-nowrap
-                    px-2 py-1 
-                    rounded 
-                    w-62 
-                    ${
-                      timer > 10 ? 'text-green-500' : timer > 5 ? 'text-orange-500' : 'text-red-500'
-                    }
-                  `}
-                >
-                  {timer === defaultSecondsToAnswerQuestion ? null : (
-                    <span>
-                      {' '}
-                      Time remaining:{' '}
-                      <span className="font-mono inline-block w-6 text-right">
-                        {String(timer).padStart(2, ' ')}
-                      </span>{' '}
-                      seconds
-                    </span>
-                  )}
-                </div>
               </div>
 
               <div className="flex justify-between">
@@ -163,7 +185,10 @@ export default function QuestionBox({ handleExitGame, quizData }) {
                 </div>
 
                 {showCorrectAnswer && selectedAnswer !== correctAnswer && (
-                  <p className="text-green-500">Answer: {correctAnswer}</p>
+                  <>
+                    <p className="text-green-500">Correct Answer: {correctAnswer}</p>
+                    {/* <p className="text-blue-500">Explanation: {explanation}</p> */}
+                  </>
                 )}
                 <button
                   onClick={handleGotoNextQuestion}
@@ -176,6 +201,7 @@ export default function QuestionBox({ handleExitGame, quizData }) {
           </div>
         </div>
       )}
+
       {showScorePopup ? (
         <div className="fixed top-0 left-0 w-full flex items-center justify-center">
           <div className="modal-overlay">
