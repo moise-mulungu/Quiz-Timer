@@ -12,6 +12,7 @@ export default function QuestionBox({ handleExitGame, quizData }) {
   const [showScorePopup, setShowScorePopup] = useState(false)
   const [timerKey, setTimerKey] = useState(0)
   const [explanation, setExplanation] = useState(null)
+  const [progress, setProgress] = useState(0)
 
   useEffect(() => {
     setTimerKey((prevKey) => prevKey + 1) // Reset key to restart CountdownCircleTimer
@@ -22,7 +23,10 @@ export default function QuestionBox({ handleExitGame, quizData }) {
     setSelectedAnswer(selectedAnswer)
 
     if (selectedAnswer === correctAnswer) {
-      setScore(score + 1)
+      const newScore = score + 1
+      setScore(newScore)
+      // Update progress based on the number of correct answers
+      setProgress((newScore / quizData.length) * 100)
     } else {
       // Retrieve explanation for the current question
       const currentQuestion = quizData[currentQuestionIndex]
@@ -75,8 +79,20 @@ export default function QuestionBox({ handleExitGame, quizData }) {
               <div className="relative h-2 mb-4">
                 <div
                   className="absolute left-0 top-0 h-2 bg-green-500"
-                  style={{ width: `${(currentQuestionIndex / quizData.length) * 100}%` }}
+                  // style={{ width: `${(currentQuestionIndex / quizData.length) * 100}%` }}
+                  style={{ width: `${progress}%` }}
                 />
+                <div
+                  className="absolute left-0 top-0 h-2 flex items-center justify-end pr-2"
+                  style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+                    backdropFilter: 'blur(5px)',
+                  }}
+                >
+                  <span className="text-sm font-bold text-gray-700 px-2 py-1 rounded">
+                    {`${progress}%`}
+                  </span>
+                </div>
               </div>
               <div className="flex justify-between items-center mb-4">
                 <div className="text-xl font-bold text-blue-600">{question}</div>
