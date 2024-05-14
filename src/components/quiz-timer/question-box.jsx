@@ -64,7 +64,7 @@ export default function QuestionBox({ handleExitGame, quizData }) {
     setShowCorrectAnswer(false)
     setScore(0)
     setShowScorePopup(false)
-    setTimerKey((prevKey) => prevKey + 1) // Reset key to restart CountdownCircleTimer
+    setTimerKey((prevKey) => prevKey + 1)
   }
 
   const { question, correctAnswer, answerChoices } = quizData[currentQuestionIndex]
@@ -77,22 +77,11 @@ export default function QuestionBox({ handleExitGame, quizData }) {
             <>
               {/* Add progress bar here */}
               <div className="relative h-2 mb-4">
+                <div className="absolute left-0 top-0 h-2 bg-gray-200" style={{ width: '100%' }} />
                 <div
                   className="absolute left-0 top-0 h-2 bg-green-500"
-                  // style={{ width: `${(currentQuestionIndex / quizData.length) * 100}%` }}
                   style={{ width: `${progress}%` }}
                 />
-                <div
-                  className="absolute left-0 top-0 h-2 flex items-center justify-end pr-2"
-                  style={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.6)',
-                    backdropFilter: 'blur(5px)',
-                  }}
-                >
-                  <span className="text-sm font-bold text-gray-700 px-2 py-1 rounded">
-                    {`${progress}%`}
-                  </span>
-                </div>
               </div>
               <div className="flex justify-between items-center mb-4">
                 <div className="text-xl font-bold text-blue-600">{question}</div>
@@ -134,9 +123,9 @@ export default function QuestionBox({ handleExitGame, quizData }) {
                       setShowCorrectAnswer(true)
                       return [true, 0]
                     }}
-                    size={40} // Reduce the size of the timer
-                    strokeWidth={6} // Adjust the thickness of the timer circle
-                    className="mt-4" // Add margin-top
+                    size={40}
+                    strokeWidth={6}
+                    className="mt-4"
                   >
                     {({ remainingTime }) => (
                       <div
@@ -201,10 +190,7 @@ export default function QuestionBox({ handleExitGame, quizData }) {
                 </div>
 
                 {showCorrectAnswer && selectedAnswer !== correctAnswer && (
-                  <>
-                    <p className="text-green-500">Correct Answer: {correctAnswer}</p>
-                    {/* <p className="text-blue-500">Explanation: {explanation}</p> */}
-                  </>
+                  <p className="text-green-500">Correct Answer: {correctAnswer}</p>
                 )}
                 <button
                   onClick={handleGotoNextQuestion}
